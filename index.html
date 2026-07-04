@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>04 · 07</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#0a0a0a;
+    color:white;
+    font-family:'Inter',sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    overflow:hidden;
+}
+
+.container{
+    width:min(750px,90%);
+    text-align:center;
+}
+
+.text{
+    font-size:2rem;
+    line-height:1.7;
+    min-height:180px;
+    opacity:0;
+    transform:translateY(20px);
+    transition:all .8s ease;
+}
+
+.text.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+button{
+    margin-top:50px;
+    padding:14px 30px;
+    border:none;
+    border-radius:999px;
+    background:white;
+    color:#111;
+    font-size:1rem;
+    cursor:pointer;
+    transition:.25s;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+.small{
+    font-size:1rem;
+    color:#9d9d9d;
+    margin-top:30px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="text" class="text"></div>
+
+<button id="next">
+Comenzar
+</button>
+
+</div>
+
+<script>
+
+const pages = [
+
+{
+text:"¿Vale la pena abrir esto?",
+button:"Sí."
+},
+
+{
+text:"Depende.",
+button:"Continuar"
+},
+
+{
+text:"Hay personas que prefieren que ciertos días<br>pasen desapercibidos.",
+button:"..."
+},
+
+{
+text:"Y eso está bien.",
+button:"..."
+},
+
+{
+text:"Pero pasar desapercibido<br>no significa pasar inadvertido.",
+button:"..."
+},
+
+{
+text:"Hay diferencia.",
+button:"..."
+},
+
+{
+text:"Porque alguien puede decidir<br>no hacer ruido...",
+button:"..."
+},
+
+{
+text:"...y aun así ser recordado.",
+button:"..."
+},
+
+{
+text:"Solo quería que supieras<br>que hoy pensé en ti.",
+button:"♡"
+},
+
+{
+text:"Nada más.",
+button:"",
+end:true
+}
+
+];
+
+let current = 0;
+
+const text = document.getElementById("text");
+const button = document.getElementById("next");
+
+function render(){
+
+    text.classList.remove("show");
+
+    setTimeout(()=>{
+
+        text.innerHTML = pages[current].text;
+
+        text.classList.add("show");
+
+        button.textContent = pages[current].button;
+
+        if(pages[current].end){
+
+            button.style.display="none";
+
+        }
+
+    },250);
+
+}
+
+button.onclick=()=>{
+
+    current++;
+
+    render();
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>
