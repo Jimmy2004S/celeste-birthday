@@ -3,181 +3,154 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>04 · 07</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
 body{
-    background:#0a0a0a;
-    color:white;
-    font-family:'Inter',sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    overflow:hidden;
+font-family:Inter,sans-serif;color:#f5f5f5;overflow:hidden;
+background:#050505;
+display:flex;justify-content:center;align-items:center;
 }
-
-.container{
-    width:min(750px,90%);
-    text-align:center;
+body:before{
+content:"";position:fixed;inset:-20%;
+background:
+radial-gradient(circle at 20% 20%,rgba(255,255,255,.04),transparent 30%),
+radial-gradient(circle at 80% 70%,rgba(255,255,255,.03),transparent 35%),
+radial-gradient(circle at 50% 50%,rgba(255,255,255,.02),transparent 40%);
+animation:bgmove 25s ease-in-out infinite alternate;
+z-index:-3;
 }
-
+@keyframes bgmove{
+from{transform:translate(-2%,-2%) scale(1)}
+to{transform:translate(2%,2%) scale(1.08)}
+}
+#particles{position:fixed;inset:0;z-index:-2;overflow:hidden}
+.p{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(255,255,255,.12);animation:float linear infinite}
+@keyframes float{
+from{transform:translateY(110vh)}
+to{transform:translateY(-10vh)}
+}
+.glow{
+position:fixed;width:300px;height:300px;border-radius:50%;
+background:radial-gradient(circle,rgba(255,255,255,.05),transparent 70%);
+pointer-events:none;filter:blur(25px);transform:translate(-50%,-50%);
+}
+.card{
+width:min(760px,90%);
+padding:55px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+backdrop-filter:blur(14px);
+border-radius:26px;
+box-shadow:0 10px 40px rgba(0,0,0,.45);
+text-align:center;
+transition:.6s;
+}
+.header{font-size:.8rem;letter-spacing:6px;color:#999;margin-bottom:30px}
 .text{
-    font-size:2rem;
-    line-height:1.7;
-    min-height:180px;
-    opacity:0;
-    transform:translateY(20px);
-    transition:all .8s ease;
+min-height:180px;
+font-size:2rem;
+line-height:1.7;
+text-shadow:0 0 12px rgba(255,255,255,.04);
+opacity:0;transform:translateY(15px);
+transition:.5s;
 }
-
-.text.show{
-    opacity:1;
-    transform:translateY(0);
-}
-
+.text.show{opacity:1;transform:translateY(0)}
 button{
-    margin-top:50px;
-    padding:14px 30px;
-    border:none;
-    border-radius:999px;
-    background:white;
-    color:#111;
-    font-size:1rem;
-    cursor:pointer;
-    transition:.25s;
+margin-top:35px;padding:14px 28px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+color:#fff;border-radius:999px;
+cursor:pointer;font-size:1rem;
+transition:.25s;
 }
-
 button:hover{
-    transform:scale(1.05);
+transform:translateY(-2px);
+background:rgba(255,255,255,.09);
+box-shadow:0 0 20px rgba(255,255,255,.08);
 }
-
-.small{
-    font-size:1rem;
-    color:#9d9d9d;
-    margin-top:30px;
-}
-
+.footer{margin-top:25px;color:#777;font-size:.8rem}
 </style>
 </head>
-
 <body>
-
-<div class="container">
-
+<div id="particles"></div>
+<div class="glow" id="glow"></div>
+<div class="card">
+<div class="header">04 · 07</div>
 <div id="text" class="text"></div>
-
-<button id="next">
-Comenzar
-</button>
-
+<button id="next">Comenzar</button>
+<div class="footer">Una pequeña pausa.</div>
 </div>
-
 <script>
-
-const pages = [
-
-{
-text:"¿Vale la pena abrir esto?",
-button:"Sí."
-},
-
-{
-text:"Depende.",
-button:"Continuar"
-},
-
-{
-text:"Hay personas que prefieren que ciertos días<br>pasen desapercibidos.",
-button:"..."
-},
-
-{
-text:"Y eso está bien.",
-button:"..."
-},
-
-{
-text:"Pero pasar desapercibido<br>no significa pasar inadvertido.",
-button:"..."
-},
-
-{
-text:"Hay diferencia.",
-button:"..."
-},
-
-{
-text:"Porque alguien puede decidir<br>no hacer ruido...",
-button:"..."
-},
-
-{
-text:"...y aun así ser recordado.",
-button:"..."
-},
-
-{
-text:"Solo quería que supieras<br>que hoy pensé en ti.",
-button:"♡"
-},
-
-{
-text:"Nada más.",
-button:"",
-end:true
-}
-
+const pages=[
+"¿Vale la pena abrir esto?",
+"Depende.",
+"Hay personas que prefieren que ciertos días<br>pasen desapercibidos.",
+"Y eso está bien.",
+"Pero pasar desapercibido<br>no significa pasar inadvertido.",
+"Hay diferencia.",
+"Porque alguien puede decidir<br>no hacer ruido...",
+"...y aun así ser recordado.",
+"Solo quería que supieras<br>, que yo lo recorde.",
+"Nada más. XD"
 ];
+const labels=["Sí.","Continuar","...","...","...","...","...","...","♡",""];
+let i=0;
+const t=document.getElementById("text");
+const b=document.getElementById("next");
 
-let current = 0;
-
-const text = document.getElementById("text");
-const button = document.getElementById("next");
-
+function type(html){
+ t.classList.remove("show");
+ t.innerHTML="";
+ setTimeout(()=>{
+   t.classList.add("show");
+   let idx=0;
+   const tmp=document.createElement("div");
+   tmp.innerHTML=html;
+   const str=tmp.innerHTML;
+   function step(){
+      if(idx<=str.length){
+        t.innerHTML=str.slice(0,idx);
+        idx++;
+        setTimeout(step,22);
+      }
+   }
+   step();
+ },180);
+}
 function render(){
-
-    text.classList.remove("show");
-
-    setTimeout(()=>{
-
-        text.innerHTML = pages[current].text;
-
-        text.classList.add("show");
-
-        button.textContent = pages[current].button;
-
-        if(pages[current].end){
-
-            button.style.display="none";
-
-        }
-
-    },250);
-
+ type(pages[i]);
+ b.textContent=labels[i];
+ if(i===pages.length-1){
+   b.style.display="none";
+   setTimeout(()=>{
+      const f=document.querySelector(".footer");
+      f.style.transition="1.5s";
+      f.style.opacity="1";
+      f.innerHTML="Qué bueno que un 4 de julio ocurrió algo bonito.";
+   },2500);
+ }
 }
-
-button.onclick=()=>{
-
-    current++;
-
-    render();
-
-}
-
+b.onclick=()=>{i++;render();}
 render();
 
+const glow=document.getElementById("glow");
+document.addEventListener("mousemove",e=>{
+glow.style.left=e.clientX+"px";
+glow.style.top=e.clientY+"px";
+});
+const c=document.getElementById("particles");
+for(let i=0;i<40;i++){
+ let d=document.createElement("div");
+ d.className="p";
+ d.style.left=Math.random()*100+"vw";
+ d.style.top=Math.random()*100+"vh";
+ d.style.animationDuration=(18+Math.random()*20)+"s";
+ d.style.animationDelay=(-Math.random()*20)+"s";
+ c.appendChild(d);
+}
 </script>
-
 </body>
 </html>
